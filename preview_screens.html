@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCANA TECH — Aperçu des interfaces</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #060610;
+    --bg: #0A0A1E;
+    --bg-alt: #0D0D26;
+    --bg-card: #10102A;
+    --cyan: #00D4FF;
+    --violet: #A855F7;
+    --coral: #FF6B9D;
+    --success: #4ADE80;
+    --warning: #FBBF24;
+    --danger: #FF6B6B;
+    --text: #FFFFFF;
+    --text-sec: #B0B0D0;
+    --text-ter: #60609A;
+    --border: rgba(255,255,255,0.09);
+    --glass-edge: rgba(255,255,255,0.15);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: #08081A;
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    min-height: 100vh;
+    padding: 40px 20px 80px;
+  }
+  h1 {
+    text-align: center;
+    font-family: 'Sora', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--cyan), var(--violet));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+  .subtitle { text-align:center; color: var(--text-ter); font-size:14px; margin-bottom:48px; }
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    justify-content: center;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+  .phone-wrap { display:flex; flex-direction:column; align-items:center; gap:12px; }
+  .phone-label {
+    font-size:13px; font-weight:600; color: var(--text-sec);
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .phone {
+    width: 375px;
+    height: 812px;
+    border-radius: 44px;
+    background: var(--bg);
+    border: 1.5px solid rgba(255,255,255,0.12);
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      0 0 0 6px #0a0a1a,
+      0 0 0 8px rgba(255,255,255,0.06),
+      0 32px 80px rgba(0,0,0,0.8),
+      0 0 60px rgba(0,212,255,0.06);
+  }
+  .screen { width:100%; height:100%; position:relative; overflow:hidden; }
+
+  /* ── Status bar ─────── */
+  .status-bar {
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 14px 24px 4px;
+    font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.9);
+    position: relative; z-index:10;
+  }
+  .status-right { display:flex; gap:6px; align-items:center; }
+  .notch {
+    width:120px; height:34px; background:#000;
+    border-radius:0 0 22px 22px;
+    position:absolute; top:0; left:50%; transform:translateX(-50%);
+    z-index:11;
+  }
+
+  /* ── Backgrounds ───── */
+  .bg-obsidian {
+    background: linear-gradient(135deg, #060610 0%, #0A0A1E 50%, #0D0D26 100%);
+  }
+  .orb {
+    position:absolute; border-radius:50%;
+    filter: blur(60px); pointer-events:none;
+  }
+  .orb-cyan  { background: rgba(0,212,255,0.08); }
+  .orb-violet{ background: rgba(168,85,247,0.06); }
+  .orb-coral { background: rgba(255,107,157,0.05); }
+
+  /* ── Glassmorphic card ── */
+  .glass-card {
+    background: rgba(16,16,42,0.7);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+  }
+
+  /* ── Gradient text ── */
+  .grad-text {
+    background: linear-gradient(135deg, var(--cyan), var(--violet));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .grad-bg {
+    background: linear-gradient(135deg, var(--cyan), var(--violet));
+  }
+
+  /* ── Bottom nav ─────── */
+  .bottom-nav {
+    position:absolute; bottom:0; left:0; right:0;
+    background: rgba(10,10,30,0.95);
+    border-top: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    display:flex; padding: 8px 0 24px;
+    z-index: 10;
+  }
+  .nav-item {
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;
+    cursor:pointer;
+  }
+  .nav-icon { font-size:20px; line-height:1; }
+  .nav-label { font-size:10px; font-weight:600; color: var(--text-ter); }
+  .nav-item.active .nav-label { color: var(--cyan); }
+  .nav-item.active .nav-icon { filter: drop-shadow(0 0 6px var(--cyan)); }
+  .nav-badge {
+    position:absolute; top:-4px; right:-6px;
+    background: var(--danger); color:#fff; font-size:9px; font-weight:700;
+    width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  }
+  .nav-icon-wrap { position:relative; display:inline-block; }
+
+  /* ─── Pills / badges ─── */
+  .badge {
+    display:inline-flex; align-items:center; justify-content:center;
+    padding: 3px 10px; border-radius:20px; font-size:11px; font-weight:700;
+  }
+  .badge-success { background:rgba(74,222,128,0.15); color: var(--success); }
+  .badge-warning { background:rgba(251,191,36,0.15); color: var(--warning); }
+  .badge-danger  { background:rgba(255,107,107,0.15); color: var(--danger); }
+  .badge-cyan    { background:rgba(0,212,255,0.12);   color: var(--cyan); }
+  .badge-violet  { background:rgba(168,85,247,0.12);  color: var(--violet); }
+  .badge-coral   { background:rgba(255,107,157,0.12); color: var(--coral); }
+
+  /* ─── Progress bar ─── */
+  .progress-bar { height:4px; border-radius:2px; background: rgba(255,255,255,0.06); overflow:hidden; }
+  .progress-fill { height:100%; border-radius:2px; }
+
+  /* ─── Divider ─── */
+  .divider { height:1px; background: var(--border); margin: 0 16px; }
+
+</style>
+</head>
+<body>
+
+<h1>ARCANA TECH — Application Mobile</h1>
+<p class="subtitle">Aperçu des 7 interfaces principales</p>
+
+<div class="grid">
+
+  <!-- ═══════════════════════════════════════════════════════
+       1. SPLASH SCREEN
+  ══════════════════════════════════════════════════════════ -->
+  <div class="phone-wrap">
+    <div class="phone-label">① Splash</div>
+    <div class="phone">
+      <div class="screen bg-obsidian" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <div class="notch"></div>
+        <div class="orb orb-cyan"  style="width:320px;height:320px;top:-80px;right:-80px;"></div>
+        <div class="orb orb-violet" style="width:280px;height:280px;bottom:-60px;left:-100px;"></div>
+
+        <!-- Logo -->
+        <div style="width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--violet));display:flex;align-items:center;justify-content:center;box-shadow:0 0 60px rgba(0,212,255,0.3),0 0 100px rgba(168,85,247,0.2);">
+          <svg width="50" height="50" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L2 7v10l10 5 10-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M12 22V12M2 7l10 5 10-5" stroke="white" stroke-width="2"/>
+          </svg>
+        </div>
+
+        <div style="margin-top:24px;font-family:'Sora',sans-serif;font-size:26px;font-weight:800;" class="grad-text">ARCANA TECH</div>
+        <div style="margin-top:6px;font-size:13px;color:var(--text-ter);letter-spacing:2px;text-transform:uppercase;">Application Étudiante</div>
+
+        <!-- Loader -->
+        <div style="margin-top:60px;width:160px;height:3px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;">
+          <div style="width:65%;height:100%;background:linear-gradient(90deg,var(--cyan),var(--violet));border-radius:2px;animation:load 1.5s ease infinite;"></div>
+        </div>
+        <div style="margin-top:10px;font-size:12px;color:var(--text-ter);">Chargement…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       2. LOGIN SCREEN
+  ══════════════════════════════════════════════════════════ -->
+  <div class="phone-wrap">
+    <div class="phone-label">② Connexion</div>
+    <div class="phone">
+      <div class="screen bg-obsidian" style="overflow-y:auto;">
+        <div class="notch"></div>
+        <div class="orb orb-cyan"  style="width:280px;height:280px;top:-80px;right:-60px;"></div>
+        <div class="orb orb-violet" style="width:300px;height:300px;bottom:200px;left:-100px;"></div>
+
+        <div style="padding:70px 24px 32px;display:flex;flex-direction:column;align-items:center;gap:0;">
+          <!-- Logo -->
+          <div style="width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--violet));display:flex;align-items:center;justify-content:center;box-shadow:0 0 40px rgba(0,212,255,0.3);">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2L2 7v10l10 5 10-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M12 22V12M2 7l10 5 10-5" stroke="white" stroke-width="2"/>
+            </svg>
+          </div>
+          <div style="margin-top:16px;font-family:'Sora',sans-serif;font-size:22px;font-weight:800;" class="grad-text">ARCANA TECH</div>
+          <div style="margin-top:4px;font-size:12px;color:var(--text-ter);">Connecte-toi à ton espace étudiant</div>
+
+          <!-- Form card -->
+          <div class="glass-card" style="width:100%;margin-top:28px;padding:24px 20px;">
+            <!-- Email -->
+            <div style="margin-bottom:14px;">
+              <div style="font-size:12px;color:var(--text-sec);margin-bottom:8px;font-weight:600;">EMAIL</div>
+              <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(0,212,255,0.3);border-radius:14px;padding:14px 16px;font-size:14px;color:var(--text-sec);">koffi.ahouansou@uac.bj</div>
+            </div>
+            <!-- Password -->
+            <div style="margin-bottom:8px;">
+              <div style="font-size:12px;color:var(--text-sec);margin-bottom:8px;font-weight:600;">MOT DE PASSE</div>
+              <div style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:14px;padding:14px 16px;font-size:14px;color:var(--text-ter);display:flex;justify-content:space-between;">
+                <span>••••••••••</span><span style="color:var(--cyan);">👁</span>
+              </div>
+            </div>
+            <!-- Forgot -->
+            <div style="text-align:right;font-size:12px;margin-bottom:20px;">
+              <span class="grad-text" style="font-weight:600;cursor:pointer;">Mot de passe oublié ?</span>
+            </div>
+            <!-- Login btn -->
+            <div class="grad-bg" style="border-radius:16px;padding:15px;display:flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 6px 20px rgba(0,212,255,0.25);">
+              <span style="font-size:15px;font-weight:700;">Se connecter</span>
+              <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;">→</div>
+            </div>
+          </div>
+
+          <!-- Or divider -->
+          <div style="width:100%;display:flex;align-items:center;gap:12px;margin:16px 0;">
+            <div style="flex:1;height:1px;background:var(--border);"></div>
+            <span style="font-size:13px;color:var(--text-ter);">ou</span>
+            <div style="flex:1;height:1px;background:var(--border);"></div>
+          </div>
+
+          <!-- Social buttons -->
+          <div style="width:100%;display:flex;gap:10px;margin-bottom:14px;">
+            <!-- Google -->
+            <div style="flex:1;height:48px;border-radius:14px;background:rgba(255,255,255,0.05);border:1px solid var(--glass-edge);display:flex;align-items:center;justify-content:center;gap:8px;">
+              <div style="width:22px;height:22px;border-radius:50%;background:conic-gradient(#4285F4 0deg 90deg,#34A853 90deg 180deg,#FBBC05 180deg 270deg,#EA4335 270deg 360deg);"></div>
+              <span style="font-size:13px;font-weight:600;color:var(--text);">Google</span>
+            </div>
+            <!-- TikTok -->
+            <div style="flex:1;height:48px;border-radius:14px;background:rgba(255,255,255,0.05);border:1px solid var(--glass-edge);display:flex;align-items:center;justify-content:center;gap:8px;">
+              <span style="font-size:18px;">♪</span>
+              <span style="font-size:13px;font-weight:600;color:var(--text);">TikTok</span>
+            </div>
+          </div>
+
+          <!-- Scanner card -->
+          <div style="width:100%;border-radius:18px;background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.15);padding:14px 16px;display:flex;align-items:center;gap:14px;">
+            <div class="grad-bg" style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">📇</div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:700;color:var(--text);">Scanner ma carte étudiant</div>
+              <div style="font-size:11px;color:var(--text-ter);margin-top:2px;">Photo ou QR → inscription auto</div>
+            </div>
+            <span style="color:rgba(0,212,255,0.6);">›</span>
+          </div>
+
+          <!-- Register -->
+          <div style="margin-top:18px;font-size:13px;color:var(--text-sec);">
+            Pas de compte ? <span class="grad-text" style="font-weight:700;">S'inscrire</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       3. HOME / DASHBOARD
+  ══════════════════════════════════════════════════════════ -->
+  <div class="phone-wrap">
+    <div class="phone-label">③ Accueil</div>
+    <div class="phone">
+      <div class="screen bg-obsidian">
+        <div class="notch"></div>
+        <div class="orb orb-cyan"  style="width:260px;height:260px;top:-40px;right:-60px;"></div>
+        <div class="orb orb-coral" style="width:200px;height:200px;bottom:200px;left:-80px;"></div>
+
+        <!-- Header -->
+        <div style="padding:52px 20px 16px;display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:13px;color:var(--text-ter);">Bonjour 👋</div>
+            <div style="font-size:20px;font-weight:800;font-family:'Sora',sans-serif;margin-top:2px;">Koffi Ahouansou</div>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:4px;">
+              <div class="badge badge-cyan">Informatique · L3</div>
+            </div>
+          </div>
+          <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--violet));display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 20px rgba(0,212,255,0.3);">👤</div>
+        </div>
+
+        <!-- Stats cards -->
+        <div style="padding:0 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;">
+          <div class="glass-card" style="padding:14px 10px;text-align:center;">
+            <div class="grad-text" style="font-size:22px;font-weight:800;">87%</div>
+            <div style="font-size:10px;color:var(--text-ter);margin-top:4px;">Présence</div>
+          </div>
+          <div class="glass-card" style="padding:14px 10px;text-align:center;">
+            <div style="font-size:22px;font-weight:800;color:var(--warning);">3</div>
+            <div style="font-size:10px;color:var(--text-ter);margin-top:4px;">Retards</div>
+          </div>
+          <div class="glass-card" style="padding:14px 10px;text-align:center;">
+            <div style="font-size:22px;font-weight:800;color:var(--danger);">2</div>
+            <div style="font-size:10px;color:var(--text-ter);margin-top:4px;">Absences</div>
+          </div>
+        </div>
+
+        <!-- Next course -->
+        <div style="padding:0 20px;margin-bottom:16px;">
+          <div style="font-size:13px;font-weight:700;color:var(--text-sec);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">Prochain cours</div>
+          <div class="glass-card" style="padding:16px;border:1px solid rgba(0,212,255,0.2);">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <div>
+                <div style="font-size:15px;font-weight:700;">Algorithmique</div>
+                <div style="font-size:12px;color:var(--text-ter);margin-top:3px;">Prof. M. Dossou · Salle B204</div>
+              </div>
+              <div class="badge badge-cyan">10:30</div>
+            </div>
+            <div style="margin-top:12px;display:flex;align-items:center;gap:6px;">
+              <div style="flex:1;height:3px;background:rgba(0,212,255,0.08);border-radius:2px;overflow:hidden;">
+                <div style="width:35%;height:100%;background:linear-gradient(90deg,var(--cyan),var(--violet));"></div>
+              </div>
+              <span style="font-size:11px;color:var(--cyan);">Dans 45 min</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent attendances -->
+        <div style="padding:0 20px;">
+          <div style="font-size:13px;font-weight:700;color:var(--text-sec);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">Récents</div>
+          <div class="glass-card" style="padding:4px 0;">
+            <div style="padding:12px 16px;display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <div style="font-size:13px;font-weight:600;">Base de données</div>
+                <div style="font-size:11px;color:var(--text-ter);">Hier · 08:00</div>
+              </div>
+              <div class="badge badge-success">Présent</div>
+            </div>
+            <div class="divider"></div>
+            <div style="padding:12px 16px;display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <div style="font-size:13px;font-weight:600;">Réseaux</div>
+                <div style="font-size:11px;color:var(--text-ter);">Hier · 10:30</div>
+              </div>
+              <div class="badge badge-warning">Retard</div>
+            </div>
+            <div class="divider"></div>
+            <div style="padding:12px 16px;display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <div style="font-size:13px;font-weight:600;">Maths</div>
+                <div style="font-size:11px;color:var(--text-ter);">Lun · 14:00</div>
+              </div>
+              <div class="badge badge-success">Présent</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom nav -->
+        <div class="bottom-nav">
+          <div class="nav-item active">
+            <div class="nav-icon-wrap"><span class="nav-icon">🏠</span>
+              <div class="nav-badge">3</div>
+            </div>
+            <span class="nav-label" style="color:var(--cyan);">Accueil</span>
+          </div>
+          <div class="nav-item"><span class="nav-icon" style="opacity:.5;">📅</span><span class="nav-label">EDT</span></div>
+          <div class="nav-item"><span class="nav-icon" style="opacity:.5;">✅</span><span class="nav-label">Présences</span></div>
+          <div class="nav-item"><span class="nav-icon" style="opacity:.5;">👤</span><span class="nav-label">Profil</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       4. EMPLOI DU TEMPS
+  ══════════════════════════════════════════════════════════ -->
+  <div class="phone-wrap">
+    <div class="phone-label">④ Emploi du temps</div>
+    <div class="phone">
+      <div class="screen bg-obsidian">
+        <div class="notch"></div>
+        <div class="orb orb-violet" style="width:250px;height:250px;top:-40px;left:-60px;"></div>
+
+        <!-- Header -->
+        <div style="padding:52px 20px 12px;">
+          <div style="font-size:22px;font-weight:800;font-family:'Sora',sans-serif;">Emploi du temps</div>
+          <div style="font-size:13px;color:var(--text-ter);margin-top:2px;">Semaine du 31 mars 2026</div>
+        </div>
+
+        <!-- Day tabs -->
+        <div style="display:flex;gap:6px;padding:0 20px;overflow-x:auto;scrollbar-width:none;padding-bottom:12px;">
+          <div style="flex-shrink:0;padding:8px 14px;border-radius:30px;font-size:12px;font-weight:700;background:var(--bg-card);color:var(--text-ter);">Lun</div>
+          <div style="flex-shrink:0;padding:8px 14px;border-radius:30px;font-size:12px;font-weight:700;background:var(--bg-card);color:var(--text-ter);">Mar</div>
+          <div style="flex-shrink:0;padding:8px 14px;border-radius:30px;font-size:12px;font-weight:700;background:linear-gradient(135deg,var(--cyan),var(--violet));color:#fff;box-shadow:0 4px 12px rgba(0,212,255,0.25);">Mer</div>
+          <div style="flex-shrink:0;padding:8px 14px;border-radius:30px;font-size:12px;font-weight:700;background:var(--bg-card);color:var(--text-ter);">Jeu</div>
+          <div style="flex-shrink:0;padding:8px 14px;border-radius:30px;font-size:12px;font-weight:700;background:var(--bg-card);color:var(--text-ter);">Ven</div>
+          <div style="flex-shrink:0;padding:8px 14px;border-radius:30px;font-size:12px;font-weight:700;background:var(--bg-card);color:var(--text-ter);">Sam</div>
+        </div>
+
+        <!-- Courses list -->
+        <div style="padding:0 20px;display:flex;flex-direction:column;gap:12px;">
+
+          <!-- Course 1 — in progress -->
+          <div style="border-radius:16px;background:linear-gradient(135deg,rgba(0,212,255,0.08),rgba(168,85,247,0.06));border:1px solid rgba(0,212,255,0.25);padding:16px;position:relative;overflow:hidden;">
+            <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(var(--cyan),var(--violet));border-radius:2px;"></div>
+            <div style="padding-left:8px;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div>
+                  <div style="font-size:14px;font-weight:700;">Algorithmique Avancée</div>
+                  <div style="font-size:11px;color:var(--text-ter);margin-top:3px;">Prof. Martin Dossou</div>
+                </div>
+                <div class="badge badge-cyan">En cours</div>
+              </div>
+              <div style="display:flex;gap:8px;margin-top:10px;">
+                <div class="badge badge-violet">08:00 – 10:00</div>
+                <div class="badge" style="background:rgba(255,255,255,0.05);color:var(--text-sec);">Salle B204</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Course 2 -->
+          <div class="glass-card" style="padding:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <div>
+                <div style="font-size:14px;font-weight:700;">Base de Données</div>
+                <div style="font-size:11px;color:var(--text-ter);margin-top:3px;">Prof. Abiodun Kèdé</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:10px;">
+              <div class="badge badge-coral">10:30 – 12:30</div>
+              <div class="badge" style="background:rgba(255,255,255,0.05);color:var(--text-sec);">Amphi A</div>
+            </div>
+          </div>
+
+          <!-- Course 3 -->
+          <div class="glass-card" style="padding:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <div>
+                <div style="font-size:14px;font-weight:700;">Réseaux Informatiques</div>
+                <div style="font-size:11px;color:var(--text-ter);margin-top:3px;">Prof. Soumaila Boni</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:10px;">
+              <div class="badge badge-success">14:00 – 16:00</div>
+              <div class="badge" style="background:rgba(255,255,255,0.05);color:var(--text-sec);">Salle C101</div>
+            </div>
+          </div>
+
+          <!-- Course 4 -->
+          <div class="glass-card" style="padding:16px;opacity:0.55;">
+            <div style="font-size:14px;font-weight:700;">Mathématiques</div>
+            <div style="font-size:11px;color:var(--text-ter);margin-top:3px;">Prof. Akakpo Komlan</div>
+            <div style="display:flex;gap:8px;margin-top:10px;">
+              <div class="badge" style="background:rgba(255,255,255,0.05);color:var(--text-sec);">16:30 – 18:00</div>
+              <div class="badge" style="background:rgba(255,255,255,0.05);color:var(--text-sec);">Salle B102</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom nav -->
+        <div class="bottom-nav">
+          <div class="nav-item"><span class="nav-icon" style="opacity:.5;">🏠</span><span class="nav-label">Accueil</span></div>
+          <div class="nav-item active"><span class="nav-icon">📅</span><span class="nav-label" style="color:var(--cyan);">EDT</span></div>
+          <div class="nav-item"><span class="nav-icon" style="opacity:.5;">✅</span><span class="nav-label">Présences</span></div>
+          <div class="nav-item"><span class="nav-icon" style="opacity:.5;">👤</span><span class="nav-label">Profil</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       5. HISTORIQUE PRÉSENCES
+  ══════════════════════════════════════════════════════════ -->
+  <div class="phone-wrap">
+    <div class="phone-label">⑤ Présences</div>
+    <div class="phone">
+      <div class="screen bg-obsidian">
+        <div class="notch"></div>
+        <div class="orb orb-coral" style="width:220px;height:220px;top:-30px;right:-50px;"></div>
+
+        <!-- Header -->
+        <div style="padding:52px 20px 16px;">
+          <div style="font-size:22px;font-weight:800;font-family:'Sora',sans-serif;">Mes Présences</div>
+          <div style="font-size:13px;color:var(--text-ter);margin-top:2px;">Historique · Semestre 2</div>
+        </div>
+
+        <!-- Stats row -->
+        <div style="padding:0 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+          <div class="glass-card" style="padding:12px;text-align:center;">
+            <div style="font-size:20px;font-weight:800;color:var(--success);">87%</div>
+            <div style="font-size:10px;color:var(--text-ter);margin-top:3px;">Présence</div>
+          </div>
+          <div class="glass-card" style="padding:12px;text-align:center;">
+            <div style="font-size:20px;font-weight:800;color:var(--warning);">3</div>
+            <div style="font-size:10px;color:var(--text-ter);margin-top:3px;">Retards</div>
+          </div>
+          <div class="glass-card" style="padding:12px;text-align:center;">
+            <div style="font-size:20px;font-weight:800;color:var(--danger);">2</div>
+            <div style="font-size:10px;color:var(--text-ter);margin-top:3px;">Absences</div>
+          </div>
+        </div>
+
+        <!-- Filter chips -->
+        <div style="display:flex;gap:8px;padding:0 20px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none;">
+          <div style="flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;background:linear-gradient(135deg,var(--cyan),var(--violet));color:#fff;">Tous</div>
+          <div style="flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:var(--bg-card);color:var(--text-ter);">Présent</div>
+          <div style="flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:var(--bg-card);color:var(--text-ter);">Retard</div>
+          <div style="flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:var(--bg-card);color:var(--text-ter);">Absent</div>
+        </div>
+
+        <!-- List -->
+        <div style="padding:0 20px;display:flex;flex-direction:column;gap:8px;">
+          <div class="glass-card" style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-size:13px;font-weight:700;">Algorithmique</div>
+              <div style="font-size:11px;color:var(--text-ter);margin-top:2px;">Aujourd'hui · 08:03</div>
+            </div>
+            <div class="badge badge-success">Présent</div>
+          </div>
+          <div class="glass-card" style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-size:13px;font-weight:700;">Base de données</div>
+              <div style="font-size:11px;color:var(--text-ter);margin-top:2px;">Hier · 10:48</div>
+            </div>
+            <div class="badge badge-warning">Retard</div>
+          </div>
+          <div class="glass-card" style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-size:13px;font-weight:700;">Réseaux</div>
+              <div style="font-size:11px;color:var(--text-ter);margin-top:2px;">Hier · 14:02</div>
+            </div>
+            <div class="badge badge-success">Présent</div>
+          </div>
+          <div class="glass-card" style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-size:13px;font-weight:700;">Maths</div>
+              <div style="font-size:11px;color:var(--text-ter);margin-top:2px;">Lun · 16:30</div>
+            </div>
+            <div class="badge badge-danger">Absent</div>
+          </div>
+          <div class="glass-card" style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-size:13px;font-weight:700;">Algorithmique</div>
+              <div style="font-size:11px;color:var(--text-ter);margin-top:2px;">Lun · 08:01</div>
+            </div>
+            <div class="badge badge-success">Présent</div>
+          </div>
+        </div>
+
+        <!-- Bottom nav -->
+        <div class="bottom-nav">
+          <div class="nav-item"><span class="nav-icon" style="opacity:.5;">🏠</span><span class="nav-label">Accueil</span></div>
+          <div class="nav-item"><span class="nav-icon" style="opacity:.5;">📅</span><span class="nav-label">EDT</span></div>
+          <div class="nav-item active"><span class="nav-icon">✅</span><span class="nav-label" style="color:var(--cyan);">Présences</span></div>
+          <div class="nav-item"><span class="nav-icon" style="opacity:.5;">👤</span><span class="nav-label">Profil</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       6. NOTIFICATIONS
+  ══════════════════════════════════════════════════════════ -->
+  <div class="phone-wrap">
+    <div class="phone-label">⑥ Notifications</div>
+    <div class="phone">
+      <div class="screen bg-obsidian">
+        <div class="notch"></div>
+        <div class="orb orb-violet" style="width:240px;height:240px;top:-50px;right:-60px;"></div>
+
+        <!-- Header -->
+        <div style="padding:52px 20px 16px;display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:22px;font-weight:800;font-family:'Sora',sans-serif;">Notifications</div>
+            <div style="font-size:13px;color:var(--text-ter);margin-top:2px;">3 non lues</div>
+          </div>
+          <div style="font-size:12px;font-weight:600;" class="grad-text">Tout lire</div>
+        </div>
+
+        <!-- Notifs list -->
+        <div style="padding:0 20px;display:flex;flex-direction:column;gap:10px;">
+
+          <!-- Unread notif -->
+          <div style="border-radius:18px;background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.2);padding:16px;position:relative;">
+            <div style="position:absolute;top:16px;right:16px;width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);"></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div class="grad-bg" style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">📅</div>
+              <div style="flex:1;">
+                <div style="font-size:13px;font-weight:700;">Cours déplacé</div>
+                <div style="font-size:12px;color:var(--text-sec);margin-top:3px;line-height:1.5;">Algorithmique du <b>mercredi 08:00</b> déplacé au jeudi 10:30</div>
+                <div style="display:flex;gap:6px;margin-top:8px;">
+                  <div class="badge badge-violet">Jeu</div>
+                  <div class="badge badge-cyan">10:30</div>
+                  <div class="badge" style="background:rgba(255,255,255,0.05);color:var(--text-sec);">B204</div>
+                </div>
+                <div style="font-size:11px;color:var(--text-ter);margin-top:8px;">Il y a 2 heures</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Unread notif 2 -->
+          <div style="border-radius:18px;background:rgba(168,85,247,0.05);border:1px solid rgba(168,85,247,0.2);padding:16px;position:relative;">
+            <div style="position:absolute;top:16px;right:16px;width:8px;height:8px;border-radius:50%;background:var(--violet);box-shadow:0 0 8px var(--violet);"></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div style="width:40px;height:40px;border-radius:12px;background:rgba(168,85,247,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">➕</div>
+              <div style="flex:1;">
+                <div style="font-size:13px;font-weight:700;">Nouveau cours ajouté</div>
+                <div style="font-size:12px;color:var(--text-sec);margin-top:3px;line-height:1.5;">TD Réseaux ajouté le <b>vendredi 08:00</b> en salle C102</div>
+                <div style="font-size:11px;color:var(--text-ter);margin-top:8px;">Hier · 18:45</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Read notif -->
+          <div class="glass-card" style="padding:16px;opacity:0.65;">
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div style="width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">✏️</div>
+              <div style="flex:1;">
+                <div style="font-size:13px;font-weight:700;">Cours modifié</div>
+                <div style="font-size:12px;color:var(--text-sec);margin-top:3px;">Maths déplacé de 14h à 16h30</div>
+                <div style="font-size:11px;color:var(--text-ter);margin-top:6px;">Lun · 09:00</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Read notif 2 -->
+          <div class="glass-card" style="padding:16px;opacity:0.65;">
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div style="width:40px;height:40px;border-radius:12px;background:rgba(74,222,128,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">🗑</div>
+              <div style="flex:1;">
+                <div style="font-size:13px;font-weight:700;">Cours annulé</div>
+                <div style="font-size:12px;color:var(--text-sec);margin-top:3px;">BD du vendredi 10h annulé</div>
+                <div style="font-size:11px;color:var(--text-ter);margin-top:6px;">Dim · 20:12</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom nav (no tab for notifications, back arrow) -->
+        <div class="bottom-nav">
+          <div class="nav-item"><span class="nav-icon" style="opacity:.5;">🏠</span><span class="nav-label">Accueil</span></div>
+          <div class="nav-item"><span class="nav-icon" style="opacity:.5;">📅</span><span class="nav-label">EDT</span></div>
+          <div class="nav-item"><span class="nav-icon" style="opacity:.5;">✅</span><span class="nav-label">Présences</span></div>
+          <div class="nav-item"><span class="nav-icon" style="opacity:.5;">👤</span><span class="nav-label">Profil</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       7. PROFIL
+  ══════════════════════════════════════════════════════════ -->
+  <div class="phone-wrap">
+    <div class="phone-label">⑦ Profil</div>
+    <div class="phone">
+      <div class="screen bg-obsidian">
+        <div class="notch"></div>
+        <div class="orb orb-cyan"  style="width:220px;height:220px;top:-30px;right:-40px;"></div>
+        <div class="orb orb-coral" style="width:180px;height:180px;bottom:250px;left:-60px;"></div>
+
+        <!-- Header -->
+        <div style="padding:52px 20px 0;display:flex;flex-direction:column;align-items:center;text-align:center;">
+          <!-- Avatar -->
+          <div style="position:relative;margin-bottom:12px;">
+            <div style="width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--violet));display:flex;align-items:center;justify-content:center;font-size:40px;box-shadow:0 0 30px rgba(0,212,255,0.25);">👤</div>
+            <div class="grad-bg" style="position:absolute;bottom:0;right:0;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;border:2px solid var(--bg);">✏️</div>
+          </div>
+          <div style="font-size:20px;font-weight:800;font-family:'Sora',sans-serif;">Koffi Ahouansou</div>
+          <div class="badge badge-cyan" style="margin-top:6px;">UAC · Informatique L3</div>
+          <div style="font-size:12px;color:var(--text-ter);margin-top:6px;">koffi.ahouansou@uac.bj</div>
+        </div>
+
+        <!-- Info card -->
+        <div class="glass-card" style="margin:16px 20px 0;padding:4px 0;">
+          <div style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-size:16px;">📞</span>
+              <div>
+                <div style="font-size:11px;color:var(--text-ter);">Téléphone</div>
+                <div style="font-size:13px;font-weight:600;">+229 97 12 34 56</div>
+              </div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-size:16px;">🎓</span>
+              <div>
+                <div style="font-size:11px;color:var(--text-ter);">Matricule</div>
+                <div style="font-size:13px;font-weight:600;">UAC-2024-0042</div>
+              </div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-size:16px;">🏫</span>
+              <div>
+                <div style="font-size:11px;color:var(--text-ter);">Université</div>
+                <div style="font-size:13px;font-weight:600;">Université d'Abomey-Calavi</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RFID card -->
+        <div style="margin:12px 20px 0;border-radius:18px;padding:16px;background:linear-gradient(135deg,rgba(0,212,255,0.06),rgba(168,85,247,0.06));border:1px solid rgba(0,212,255,0.15);">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="font-size:28px;">💳</div>
+            <div style="flex:1;">
+              <div style="font-size:12px;color:var(--text-ter);">Carte RFID</div>
+              <div style="font-size:13px;font-weight:700;margin-top:2px;">UAC-RFID-0042</div>
+              <div style="font-size:11px;color:var(--text-ter);margin-top:2px;">Dernier scan : Aujourd'hui 08:03</div>
+            </div>
+            <div class="badge badge-success">Active</div>
+          </div>
+        </div>
+
+        <!-- Logout btn -->
+        <div style="margin:14px 20px 0;padding:14px;border-radius:16px;background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.2);display:flex;align-items:center;justify-content:center;gap:8px;">
+          <span style="font-size:16px;">🚪</span>
+          <span style="color:var(--danger);font-size:14px;font-weight:700;">Déconnexion</span>
+        </div>
+
+        <!-- Bottom nav -->
+        <div class="bottom-nav">
+          <div class="nav-item"><span class="nav-icon" style="opacity:.5;">🏠</span><span class="nav-label">Accueil</span></div>
+          <div class="nav-item"><span class="nav-icon" style="opacity:.5;">📅</span><span class="nav-label">EDT</span></div>
+          <div class="nav-item"><span class="nav-icon" style="opacity:.5;">✅</span><span class="nav-label">Présences</span></div>
+          <div class="nav-item active"><span class="nav-icon">👤</span><span class="nav-label" style="color:var(--cyan);">Profil</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /grid -->
+
+</body>
+</html>

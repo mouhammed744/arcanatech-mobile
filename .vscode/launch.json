@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "arcana_mobile (Chrome - HTML)",
+      "request": "launch",
+      "type": "dart",
+      "device": "chrome",
+      "args": [
+        "--web-renderer", "html",
+        "--web-port", "8080"
+      ]
+    },
+    {
+      "name": "arcana_mobile (Android)",
+      "request": "launch",
+      "type": "dart"
+    }
+  ]
+}

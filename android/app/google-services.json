@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "202734688492",
+    "project_id": "arcana-tech-23b47",
+    "storage_bucket": "arcana-tech-23b47.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:202734688492:android:c189677840b37f978b2dc9",
+        "android_client_info": {
+          "package_name": "com.example.arcana_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913330822210-gq5m94k6p7ism8ihj4qtf6civ570mcma.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.arcana_mobile",
+            "certificate_hash": "5de2dbe5f6c6dd3d7730476a2f1b3299fbdea035"
+          }
+        },
+        {
+          "client_id": "913330822210-m0ubu3cjat5us30g6klqubdfcudqjs1l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJMSlI5qxfETXwd09MmbQIrO5-U05kRvQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913330822210-m0ubu3cjat5us30g6klqubdfcudqjs1l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

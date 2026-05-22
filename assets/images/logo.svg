@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 440" fill="none">
+  <defs>
+    <linearGradient id="cyanGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00FFFF"/>
+      <stop offset="50%" stop-color="#00E5FF"/>
+      <stop offset="100%" stop-color="#00BCD4"/>
+    </linearGradient>
+    <linearGradient id="silver" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="30%" stop-color="#E8E8E8"/>
+      <stop offset="60%" stop-color="#C0C0C0"/>
+      <stop offset="100%" stop-color="#8899A6"/>
+    </linearGradient>
+    <linearGradient id="silverH" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="25%" stop-color="#D8DEE3"/>
+      <stop offset="50%" stop-color="#B0BEC5"/>
+      <stop offset="75%" stop-color="#C8CDD2"/>
+      <stop offset="100%" stop-color="#90A4AE"/>
+    </linearGradient>
+    <linearGradient id="buildingGrad" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="20%" stop-color="#E0E0E0"/>
+      <stop offset="50%" stop-color="#B0B8BF"/>
+      <stop offset="100%" stop-color="#7B8D9A"/>
+    </linearGradient>
+    <filter id="glow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="cyanGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Shield outer glow -->
+  <path d="M152 68 C120 72, 72 96, 60 130 L60 290 C60 340, 100 385, 200 420 C300 385, 340 340, 340 290 L340 130 C328 96, 280 72, 248 68"
+        stroke="#00E5FF" stroke-width="3" fill="none" opacity="0.25" filter="url(#cyanGlow)"/>
+
+  <!-- Left shield outline - cyan -->
+  <path d="M168 72 C130 78, 78 104, 66 136 L66 288 C66 335, 105 378, 200 414"
+        stroke="url(#cyanGrad)" stroke-width="5" fill="none" stroke-linecap="round" filter="url(#glow)"/>
+
+  <!-- Right shield outline - silver -->
+  <path d="M200 414 C295 378, 334 335, 334 288 L334 136 C322 104, 270 78, 232 72"
+        stroke="url(#silver)" stroke-width="5" fill="none" stroke-linecap="round" filter="url(#glow)"/>
+
+  <!-- Top left arm -->
+  <path d="M168 72 L178 56 Q185 48, 192 52 L200 62"
+        stroke="url(#cyanGrad)" stroke-width="5" fill="none" stroke-linecap="round" filter="url(#glow)"/>
+
+  <!-- Top right arm -->
+  <path d="M200 62 L208 52 Q215 48, 222 56 L232 72"
+        stroke="url(#silver)" stroke-width="5" fill="none" stroke-linecap="round" filter="url(#glow)"/>
+
+  <!-- RFID Waves -->
+  <g filter="url(#glow)">
+    <path d="M165 310 C130 270, 130 195, 165 150"
+          stroke="#00E5FF" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+    <path d="M145 330 C100 278, 100 188, 145 135"
+          stroke="#00E5FF" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+    <path d="M125 350 C72 288, 72 178, 125 115"
+          stroke="#00E5FF" stroke-width="4.5" fill="none" stroke-linecap="round" opacity="0.65"/>
+  </g>
+
+  <!-- S Letter -->
+  <g filter="url(#glow)">
+    <path d="M228 158 C228 155, 220 148, 208 148 C190 148, 178 158, 178 175
+             C178 192, 195 200, 208 208 C221 216, 232 224, 232 242
+             C232 260, 218 272, 200 272 C188 272, 178 266, 175 262"
+          stroke="url(#silverH)" stroke-width="18" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M228 158 C228 155, 220 148, 208 148 C190 148, 178 158, 178 175
+             C178 192, 195 200, 208 208 C221 216, 232 224, 232 242
+             C232 260, 218 272, 200 272 C188 272, 178 266, 175 262"
+          stroke="#FFFFFF" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.35"/>
+  </g>
+
+  <!-- Building -->
+  <g filter="url(#glow)">
+    <path d="M248 335 L248 145 L256 125 L264 110 L272 125 L272 145 L285 145 L285 335 Z"
+          fill="url(#buildingGrad)" opacity="0.95"/>
+    <path d="M256 125 L264 110 L268 98 L264 88 L260 78 L256 88 L252 98 L256 110 Z"
+          fill="url(#silver)" opacity="0.9"/>
+    <line x1="262" y1="78" x2="262" y2="62" stroke="url(#silver)" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="258" y1="72" x2="266" y2="72" stroke="url(#silver)" stroke-width="1.5" stroke-linecap="round"/>
+    <rect x="235" y="195" width="16" height="140" fill="url(#buildingGrad)" opacity="0.85" rx="1"/>
+    <rect x="282" y="210" width="14" height="125" fill="url(#buildingGrad)" opacity="0.8" rx="1"/>
+    <rect x="294" y="240" width="12" height="95" fill="url(#buildingGrad)" opacity="0.7" rx="1"/>
+    <line x1="255" y1="145" x2="255" y2="335" stroke="#0D1B2A" stroke-width="1" opacity="0.4"/>
+    <line x1="265" y1="145" x2="265" y2="335" stroke="#0D1B2A" stroke-width="1" opacity="0.4"/>
+    <line x1="275" y1="145" x2="275" y2="335" stroke="#0D1B2A" stroke-width="1" opacity="0.4"/>
+    <line x1="248" y1="165" x2="285" y2="165" stroke="#0D1B2A" stroke-width="1" opacity="0.35"/>
+    <line x1="248" y1="182" x2="285" y2="182" stroke="#0D1B2A" stroke-width="1" opacity="0.35"/>
+    <line x1="248" y1="199" x2="285" y2="199" stroke="#0D1B2A" stroke-width="1" opacity="0.35"/>
+    <line x1="248" y1="216" x2="285" y2="216" stroke="#0D1B2A" stroke-width="1" opacity="0.35"/>
+    <line x1="248" y1="233" x2="285" y2="233" stroke="#0D1B2A" stroke-width="1" opacity="0.35"/>
+    <line x1="248" y1="250" x2="285" y2="250" stroke="#0D1B2A" stroke-width="1" opacity="0.35"/>
+    <line x1="248" y1="267" x2="285" y2="267" stroke="#0D1B2A" stroke-width="1" opacity="0.35"/>
+    <line x1="248" y1="284" x2="285" y2="284" stroke="#0D1B2A" stroke-width="1" opacity="0.35"/>
+    <line x1="248" y1="301" x2="285" y2="301" stroke="#0D1B2A" stroke-width="1" opacity="0.35"/>
+    <line x1="248" y1="318" x2="285" y2="318" stroke="#0D1B2A" stroke-width="1" opacity="0.35"/>
+    <line x1="235" y1="210" x2="251" y2="210" stroke="#0D1B2A" stroke-width="0.8" opacity="0.3"/>
+    <line x1="235" y1="227" x2="251" y2="227" stroke="#0D1B2A" stroke-width="0.8" opacity="0.3"/>
+    <line x1="235" y1="244" x2="251" y2="244" stroke="#0D1B2A" stroke-width="0.8" opacity="0.3"/>
+    <line x1="235" y1="261" x2="251" y2="261" stroke="#0D1B2A" stroke-width="0.8" opacity="0.3"/>
+    <line x1="235" y1="278" x2="251" y2="278" stroke="#0D1B2A" stroke-width="0.8" opacity="0.3"/>
+    <line x1="235" y1="295" x2="251" y2="295" stroke="#0D1B2A" stroke-width="0.8" opacity="0.3"/>
+    <line x1="235" y1="312" x2="251" y2="312" stroke="#0D1B2A" stroke-width="0.8" opacity="0.3"/>
+    <line x1="282" y1="225" x2="296" y2="225" stroke="#0D1B2A" stroke-width="0.8" opacity="0.3"/>
+    <line x1="282" y1="245" x2="306" y2="245" stroke="#0D1B2A" stroke-width="0.8" opacity="0.3"/>
+    <line x1="282" y1="265" x2="306" y2="265" stroke="#0D1B2A" stroke-width="0.8" opacity="0.3"/>
+    <line x1="282" y1="285" x2="306" y2="285" stroke="#0D1B2A" stroke-width="0.8" opacity="0.3"/>
+    <line x1="282" y1="305" x2="306" y2="305" stroke="#0D1B2A" stroke-width="0.8" opacity="0.3"/>
+    <line x1="282" y1="325" x2="296" y2="325" stroke="#0D1B2A" stroke-width="0.8" opacity="0.3"/>
+  </g>
+</svg>

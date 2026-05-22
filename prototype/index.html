@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ARCANA TECH — Prototype Mobile</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0F0F1A;--card:#1E1E2E;--border:rgba(255,255,255,0.06);
+  --text:#fff;--text-muted:rgba(255,255,255,0.5);--text-dim:rgba(255,255,255,0.3);
+  --primary:#6366F1;--primary-light:rgba(99,102,241,0.15);--primary-alpha:rgba(99,102,241,0.4);
+  --green:#22C55E;--yellow:#F59E0B;--red:#EF4444;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;width:100vw;height:100vh}
+
+/* ── Screens ── */
+.screen{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;opacity:0;pointer-events:none;transition:opacity .35s;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.screen::-webkit-scrollbar{display:none}
+.screen.active{opacity:1;pointer-events:all}
+
+/* ══════ SPLASH 3D ══════ */
+#splash{
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  background:radial-gradient(ellipse at 50% 30%,#1a1545 0%,#0d0f25 50%,#060812 100%);
+  perspective:800px;
+}
+#splash .scene{perspective:800px;margin-bottom:10px}
+#splash .logo-3d{
+  width:140px;height:140px;border-radius:30px;overflow:hidden;
+  transform:rotateY(-15deg) rotateX(10deg);
+  transform-style:preserve-3d;
+  box-shadow:
+    0 20px 60px rgba(99,102,241,0.3),
+    0 0 100px rgba(99,102,241,0.15),
+    inset 0 0 30px rgba(255,255,255,0.05);
+  animation:float3d 4s ease-in-out infinite, logoEntry .8s ease-out;
+  border:1px solid rgba(255,255,255,0.08);
+}
+#splash .logo-3d img{width:100%;height:100%;object-fit:cover;display:block}
+@keyframes float3d{
+  0%,100%{transform:rotateY(-15deg) rotateX(10deg) translateY(0)}
+  50%{transform:rotateY(15deg) rotateX(-5deg) translateY(-12px)}
+}
+@keyframes logoEntry{
+  from{opacity:0;transform:rotateY(-40deg) rotateX(25deg) scale(0.6) translateY(30px)}
+  to{opacity:1;transform:rotateY(-15deg) rotateX(10deg) scale(1) translateY(0)}
+}
+#splash .glow-ring{
+  position:absolute;width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(99,102,241,0.2) 0%,transparent 70%);
+  animation:pulseGlow 3s ease-in-out infinite;pointer-events:none;
+}
+@keyframes pulseGlow{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.3);opacity:.8}}
+#splash h1{margin-top:28px;font-size:28px;font-weight:900;letter-spacing:4px;animation:fadeUp .6s .3s ease-out both}
+#splash .sub{margin-top:8px;color:var(--text-muted);letter-spacing:1.5px;font-size:14px;font-weight:500;animation:fadeUp .6s .5s ease-out both}
+#splash .loader{margin-top:50px;width:28px;height:28px;border:2px solid transparent;border-top-color:rgba(99,102,241,0.5);border-radius:50%;animation:fadeUp .5s .7s ease-out both,spin 1s .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+/* Particles */
+#splash .particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+#splash .particle{
+  position:absolute;width:3px;height:3px;border-radius:50%;background:rgba(99,102,241,0.4);
+  animation:drift linear infinite;
+}
+@keyframes drift{
+  0%{transform:translateY(100vh) scale(0);opacity:0}
+  10%{opacity:1}
+  90%{opacity:1}
+  100%{transform:translateY(-10vh) scale(1);opacity:0}
+}
+
+/* ══════ LOGIN ══════ */
+#login{background:linear-gradient(160deg,#0B1120 0%,#0F172A 40%,#1a1545 100%);padding:80px 32px 40px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#login .logo-img{width:88px;height:88px;border-radius:22px;object-fit:cover;box-shadow:0 0 30px rgba(99,102,241,0.2)}
+#login h2{margin-top:20px;font-size:22px;font-weight:800;letter-spacing:2px}
+#login .sub{color:var(--text-muted);font-size:14px;margin-top:6px}
+.form-group{width:100%;margin-top:18px;position:relative}
+.form-group label{display:block;color:var(--text-muted);font-size:12px;margin-bottom:6px;font-weight:500}
+.form-group input,.form-group select{
+  width:100%;padding:13px 16px 13px 44px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  border-radius:12px;color:#fff;font-size:15px;font-family:inherit;outline:none;transition:border .2s;
+}
+.form-group input:focus,.form-group select:focus{border-color:var(--primary)}
+.form-group .icon{position:absolute;left:14px;top:33px;color:rgba(255,255,255,0.3);font-size:20px}
+.form-group select{appearance:none;cursor:pointer}
+.form-group select option{background:#1E1E2E;color:#fff}
+.form-group .hint{font-size:11px;color:var(--text-dim);margin-top:4px;display:flex;align-items:center;gap:4px}
+.form-group .hint .material-icons-round{font-size:13px}
+.btn-primary{
+  width:100%;margin-top:24px;padding:15px;border:none;border-radius:12px;font-size:16px;font-weight:600;
+  color:#fff;cursor:pointer;font-family:inherit;
+  background:linear-gradient(135deg,#6366F1,#4f46e5);
+  box-shadow:0 4px 16px rgba(99,102,241,0.3);transition:transform .15s;
+}
+.btn-primary:active{transform:scale(0.98)}
+.link-btn{color:var(--text-muted);font-size:14px;margin-top:12px;cursor:pointer;background:none;border:none;font-family:inherit}
+.link-btn .hl{color:var(--primary);font-weight:600}
+
+/* ══════ REGISTER ══════ */
+#register{background:linear-gradient(160deg,#0B1120 0%,#0F172A 40%,#1a1545 100%);display:flex;flex-direction:column}
+#register .reg-header{display:flex;align-items:center;padding:16px 16px 10px;gap:10px;flex-shrink:0}
+#register .reg-header .material-icons-round{font-size:22px;color:#fff;cursor:pointer;padding:6px;border-radius:8px}
+#register .reg-header h2{font-size:18px;font-weight:700}
+#register .reg-body{flex:1;overflow-y:auto;padding:0 24px 30px;-webkit-overflow-scrolling:touch}
+.section-label{font-size:14px;font-weight:700;color:rgba(255,255,255,0.8);margin:22px 0 8px;display:flex;align-items:center;gap:8px}
+.section-label .material-icons-round{font-size:18px;color:var(--primary)}
+.form-row{display:flex;gap:12px}
+.form-row .form-group{flex:1}
+.card-upload{
+  width:100%;padding:28px 16px;background:rgba(255,255,255,0.02);border:1.5px dashed rgba(255,255,255,0.12);
+  border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:10px;
+}
+.card-upload .material-icons-round{font-size:42px;color:rgba(255,255,255,0.15)}
+.card-upload p{color:var(--text-muted);font-size:13px}
+.card-btns{display:flex;gap:14px;margin-top:6px}
+.card-btn{
+  display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:10px;
+  background:var(--primary-light);border:1px solid rgba(99,102,241,0.25);color:var(--primary);
+  font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;
+}
+.card-btn .material-icons-round{font-size:18px}
+
+/* ══════ BOTTOM NAV ══════ */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;height:72px;background:#13132a;
+  border-top:1px solid var(--border);display:none;align-items:center;justify-content:space-around;
+  padding-bottom:8px;z-index:50;
+}
+.bottom-nav .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:8px 14px;border-radius:12px}
+.bottom-nav .nav-item .material-icons-round{font-size:24px;color:rgba(255,255,255,0.25)}
+.bottom-nav .nav-item span{font-size:11px;color:rgba(255,255,255,0.25);font-weight:500}
+.bottom-nav .nav-item.active .material-icons-round{color:var(--primary)}
+.bottom-nav .nav-item.active span{color:var(--primary);font-weight:600}
+
+/* ══════ HOME ══════ */
+#home{padding:20px 20px 90px}
+.home-header{display:flex;align-items:center;gap:14px;margin-bottom:24px}
+.avatar{width:48px;height:48px;border-radius:50%;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--primary)}
+.home-header h2{font-size:20px;font-weight:700}
+.home-header .uni-name{font-size:13px;color:var(--primary);opacity:.8;margin-top:2px}
+.stats-row{display:flex;gap:10px;margin-bottom:24px}
+.stat-card{flex:1;padding:14px;background:var(--card);border-radius:16px;border:1px solid var(--border)}
+.stat-card .si{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.stat-card .si .material-icons-round{font-size:18px}
+.stat-card .sv{font-size:22px;font-weight:800}
+.stat-card .sl{font-size:11px;color:var(--text-muted);margin-top:3px}
+.stat-card.g .si{background:rgba(34,197,94,0.12)}.stat-card.g .si .material-icons-round{color:var(--green)}
+.stat-card.y .si{background:rgba(245,158,11,0.12)}.stat-card.y .si .material-icons-round{color:var(--yellow)}
+.stat-card.r .si{background:rgba(239,68,68,0.12)}.stat-card.r .si .material-icons-round{color:var(--red)}
+.stitle{font-size:16px;font-weight:700;color:rgba(255,255,255,0.85);margin-bottom:12px}
+.ci{display:flex;align-items:center;gap:12px;padding:14px;background:var(--card);border-radius:14px;border:1px solid var(--border);margin-bottom:10px}
+.ci.now{border-color:rgba(99,102,241,0.3);box-shadow:0 0 16px rgba(99,102,241,0.06)}
+.ct{width:54px;text-align:center}.ct .s{font-size:14px;font-weight:700}.ct.nt .s{color:var(--primary)}.ct .sp{width:1px;height:10px;background:rgba(255,255,255,0.1);margin:2px auto}.ct .e{font-size:12px;color:var(--text-dim)}
+.cb{width:3px;height:42px;border-radius:2px;background:rgba(99,102,241,0.2)}.ci.now .cb{background:var(--primary)}
+.cinfo{flex:1;min-width:0}.cinfo h4{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cinfo .m{display:flex;align-items:center;gap:4px;color:var(--text-muted);font-size:12px;margin-top:3px}.cinfo .m .material-icons-round{font-size:13px}
+.bn{padding:4px 8px;background:var(--primary-light);border-radius:6px;font-size:10px;font-weight:600;color:var(--primary);white-space:nowrap;flex-shrink:0}
+.ai{display:flex;align-items:center;gap:12px;padding:12px;background:var(--card);border-radius:12px;border:1px solid var(--border);margin-bottom:8px}
+.aic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.aic .material-icons-round{font-size:17px}
+.aic.p{background:rgba(34,197,94,0.12)}.aic.p .material-icons-round{color:var(--green)}
+.aic.l{background:rgba(245,158,11,0.12)}.aic.l .material-icons-round{color:var(--yellow)}
+.aic.a{background:rgba(239,68,68,0.12)}.aic.a .material-icons-round{color:var(--red)}
+.ainf{flex:1;min-width:0}.ainf h5{font-size:13px;font-weight:600}.ainf .d{font-size:11px;color:var(--text-dim);margin-top:2px}
+.ab{padding:3px 9px;border-radius:7px;font-size:11px;font-weight:600;flex-shrink:0}
+.ab.p{background:rgba(34,197,94,0.12);color:var(--green)}.ab.l{background:rgba(245,158,11,0.12);color:var(--yellow)}.ab.a{background:rgba(239,68,68,0.12);color:var(--red)}
+
+/* ══════ SCHEDULE ══════ */
+#schedule{padding:20px 0 90px}
+#schedule .bar{padding:0 20px 14px}
+#schedule .bar h2{font-size:20px;font-weight:700}
+.tabs{display:flex;padding:0 16px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
+.tab{padding:10px 14px;font-size:13px;color:var(--text-dim);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;font-weight:500}
+.tab.act{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+.tab .dot{display:inline-block;width:5px;height:5px;background:var(--primary);border-radius:50%;margin-left:5px;vertical-align:middle}
+.slist{padding:0 20px}
+
+/* ══════ ATTENDANCE ══════ */
+#atten{padding:20px 0 90px}
+#atten .bar{padding:0 20px 10px}
+#atten .bar h2{font-size:20px;font-weight:700}
+.pcard{margin:0 20px 12px;padding:16px;background:var(--card);border-radius:14px;border:1px solid var(--border)}
+.ptop{display:flex;justify-content:space-between;margin-bottom:8px}.ptop .pl{font-size:13px;color:var(--text-muted)}.ptop .pv{font-size:15px;font-weight:700;color:var(--primary)}
+.pbar{height:6px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden}.pbar .pf{height:100%;background:var(--primary);border-radius:4px}
+.mstats{display:flex;justify-content:space-around;margin-top:14px}
+.ms{text-align:center}.ms .mn{font-size:18px;font-weight:700}.ms .mn.g{color:var(--green)}.ms .mn.y{color:var(--yellow)}.ms .mn.r{color:var(--red)}.ms .ml{font-size:11px;color:var(--text-muted);margin-top:2px}
+.frow{display:flex;gap:8px;padding:10px 20px;overflow-x:auto;scrollbar-width:none}.frow::-webkit-scrollbar{display:none}
+.fc{padding:7px 15px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid rgba(255,255,255,0.08);background:transparent;color:var(--text-muted);font-family:inherit;white-space:nowrap}
+.fc.act{border-color:rgba(99,102,241,0.3);background:var(--primary-light);color:var(--primary);font-weight:600}
+.alist{padding:4px 20px}
+
+/* ══════ PROFILE ══════ */
+#profile{padding:20px 20px 90px;display:flex;flex-direction:column;align-items:center}
+#profile .bar{width:100%;margin-bottom:16px}
+#profile .bar h2{font-size:20px;font-weight:700}
+.pav{width:96px;height:96px;border-radius:50%;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:700;color:var(--primary);position:relative}
+.pav .cam{position:absolute;bottom:0;right:0;width:30px;height:30px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;border:3px solid var(--bg)}.pav .cam .material-icons-round{font-size:14px;color:#fff}
+.pname{font-size:22px;font-weight:700;margin-top:14px}
+.uchip{display:inline-block;padding:5px 14px;background:var(--primary-light);border-radius:8px;font-size:13px;font-weight:500;color:var(--primary);margin-top:8px}
+.isec{width:100%;margin-top:22px}
+.isec .ist{font-size:12px;font-weight:600;color:rgba(255,255,255,0.5);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.icard{background:var(--card);border-radius:14px;border:1px solid var(--border);overflow:hidden}
+.ir{display:flex;align-items:center;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.03)}.ir:last-child{border-bottom:none}
+.ir .material-icons-round{font-size:18px;color:rgba(255,255,255,0.25);margin-right:12px}
+.ir .il{font-size:13px;color:var(--text-muted);flex:1}.ir .iv{font-size:13px;font-weight:500}.ir .iv.g{color:var(--green)}
+.blogout{width:100%;margin-top:28px;padding:13px;border:1px solid rgba(239,68,68,0.25);border-radius:12px;background:transparent;color:var(--red);font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
+</style>
+</head>
+<body>
+
+<!-- ═══════ SPLASH 3D ═══════ -->
+<div class="screen active" id="splash">
+  <div class="particles" id="particles"></div>
+  <div class="glow-ring"></div>
+  <div class="scene">
+    <div class="logo-3d"><img src="logo.jpg" alt="ARCANA TECH"></div>
+  </div>
+  <h1>ARCANA TECH</h1>
+  <p class="sub">Espace Étudiant</p>
+  <div class="loader"></div>
+</div>
+
+<!-- ═══════ LOGIN ═══════ -->
+<div class="screen" id="login">
+  <img src="logo.jpg" class="logo-img" alt="ARCANA TECH">
+  <h2>ARCANA TECH</h2>
+  <p class="sub">Connectez-vous à votre espace</p>
+  <div class="form-group"><label>Email</label><span class="material-icons-round icon">email</span><input type="email" placeholder="votre@email.com" value="kofi.mensah@uac.bj"></div>
+  <div class="form-group"><label>Mot de passe</label><span class="material-icons-round icon">lock</span><input type="password" placeholder="••••••••" value="password123"></div>
+  <button class="btn-primary" onclick="go('home')">Se connecter</button>
+  <button class="link-btn">Mot de passe oublié ?</button>
+  <button class="link-btn" onclick="go('register')">Pas encore de compte ? <span class="hl">S'inscrire</span></button>
+</div>
+
+<!-- ═══════ REGISTER ═══════ -->
+<div class="screen" id="register">
+  <div class="reg-header">
+    <span class="material-icons-round" onclick="go('login')">arrow_back</span>
+    <h2>Créer un compte</h2>
+  </div>
+  <div class="reg-body">
+    <div class="section-label"><span class="material-icons-round">person</span> Informations personnelles</div>
+    <div class="form-row">
+      <div class="form-group" style="margin-top:0"><label>Nom</label><span class="material-icons-round icon" style="top:26px">badge</span><input placeholder="Mensah" value="Mensah"></div>
+      <div class="form-group" style="margin-top:0"><label>Prénom</label><span class="material-icons-round icon" style="top:26px">badge</span><input placeholder="Kofi" value="Kofi"></div>
+    </div>
+    <div class="form-group"><label>Email</label><span class="material-icons-round icon">email</span><input type="email" placeholder="votre@email.com" value="kofi.mensah@uac.bj"></div>
+    <div class="form-group"><label>Téléphone</label><span class="material-icons-round icon">phone</span><input placeholder="+229 XX XX XX XX" value="+229 97 12 34 56"></div>
+    <div class="form-group"><label>Mot de passe</label><span class="material-icons-round icon">lock</span><input type="password" placeholder="Min. 8 caractères" value="password123"></div>
+    <div class="form-group"><label>Confirmer</label><span class="material-icons-round icon">lock</span><input type="password" value="password123"></div>
+
+    <div class="section-label"><span class="material-icons-round">school</span> Informations académiques</div>
+    <div class="form-group"><label>Université</label><span class="material-icons-round icon">account_balance</span>
+      <select id="uniSelect" onchange="onUniChange()">
+        <option value="UAC" data-digits="8" data-prefix="UAC">Université d'Abomey-Calavi (UAC)</option>
+        <option value="UP" data-digits="7" data-prefix="UP">Université de Parakou (UP)</option>
+        <option value="UNSTIM" data-digits="8" data-prefix="UNSTIM">UNSTIM</option>
+        <option value="UNA" data-digits="7" data-prefix="UNA">UNA</option>
+        <option value="CERCO" data-digits="6" data-prefix="CRC">CERCO</option>
+        <option value="EPAC" data-digits="8" data-prefix="EPAC">EPAC</option>
+        <option value="PIGIER" data-digits="6" data-prefix="PIG">Pigier Bénin</option>
+        <option value="ESGIS" data-digits="7" data-prefix="ESG">ESGIS Bénin</option>
+        <option value="UCAO" data-digits="8" data-prefix="UCAO">UCAO</option>
+        <option value="HECM" data-digits="6" data-prefix="HECM">HECM</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Numéro matricule</label><span class="material-icons-round icon">tag</span>
+      <input id="matriculeInput" placeholder="UAC20231045" value="UAC20231045" maxlength="12">
+      <div class="hint" id="matriculeHint"><span class="material-icons-round">info</span> Format : UAC + 8 chiffres</div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Filière</label><span class="material-icons-round icon">menu_book</span><input placeholder="Informatique" value="Informatique"></div>
+      <div class="form-group"><label>Niveau</label><span class="material-icons-round icon">stairs</span>
+        <select><option>Licence 1</option><option>Licence 2</option><option selected>Licence 3</option><option>Master 1</option><option>Master 2</option></select>
+      </div>
+    </div>
+
+    <div class="section-label"><span class="material-icons-round">credit_card</span> Carte d'étudiant</div>
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:6px">Prenez en photo ou importez votre carte pour vérification.</p>
+    <div class="card-upload">
+      <span class="material-icons-round">add_a_photo</span>
+      <p>Ajouter votre carte d'étudiant</p>
+      <div class="card-btns">
+        <button class="card-btn"><span class="material-icons-round">camera_alt</span> Caméra</button>
+        <button class="card-btn"><span class="material-icons-round">photo_library</span> Galerie</button>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="go('home')" style="margin-top:24px;margin-bottom:8px">Créer mon compte</button>
+    <div style="text-align:center;padding-bottom:24px">
+      <button class="link-btn" onclick="go('login')">Déjà un compte ? <span class="hl">Se connecter</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ HOME ═══════ -->
+<div class="screen" id="home">
+  <div class="home-header"><div class="avatar">K</div><div><h2>Bonjour, Kofi 👋</h2><div class="uni-name">Université d'Abomey-Calavi</div></div></div>
+  <div class="stats-row">
+    <div class="stat-card g"><div class="si"><span class="material-icons-round">trending_up</span></div><div class="sv">87%</div><div class="sl">Présence</div></div>
+    <div class="stat-card y"><div class="si"><span class="material-icons-round">schedule</span></div><div class="sv">3</div><div class="sl">Retards</div></div>
+    <div class="stat-card r"><div class="si"><span class="material-icons-round">cancel</span></div><div class="sv">2</div><div class="sl">Absences</div></div>
+  </div>
+  <div class="stitle">Cours du jour</div>
+  <div class="ci now"><div class="ct nt"><div class="s">10:00</div><div class="sp"></div><div class="e">12:00</div></div><div class="cb"></div><div class="cinfo"><h4>Algorithmique avancée</h4><div class="m"><span class="material-icons-round">room</span>Amphi B · Dr. Ahouannou</div></div><div class="bn">En cours</div></div>
+  <div class="ci"><div class="ct"><div class="s">14:00</div><div class="sp"></div><div class="e">16:00</div></div><div class="cb"></div><div class="cinfo"><h4>Base de données</h4><div class="m"><span class="material-icons-round">room</span>Salle 204 · Prof. Dossou</div></div></div>
+  <div class="ci"><div class="ct"><div class="s">16:30</div><div class="sp"></div><div class="e">18:00</div></div><div class="cb"></div><div class="cinfo"><h4>Réseaux informatiques</h4><div class="m"><span class="material-icons-round">room</span>Labo 3 · Dr. Agbangla</div></div></div>
+  <div class="stitle" style="margin-top:24px">Dernières présences</div>
+  <div class="ai"><div class="aic p"><span class="material-icons-round">check_circle</span></div><div class="ainf"><h5>Algorithmique avancée</h5><div class="d">07 mars 2026 · 10:02</div></div><div class="ab p">Présent</div></div>
+  <div class="ai"><div class="aic l"><span class="material-icons-round">schedule</span></div><div class="ainf"><h5>Base de données</h5><div class="d">06 mars 2026 · 14:12</div></div><div class="ab l">Retard</div></div>
+  <div class="ai"><div class="aic p"><span class="material-icons-round">check_circle</span></div><div class="ainf"><h5>Réseaux informatiques</h5><div class="d">06 mars 2026 · 16:31</div></div><div class="ab p">Présent</div></div>
+  <div class="ai"><div class="aic a"><span class="material-icons-round">cancel</span></div><div class="ainf"><h5>Mathématiques</h5><div class="d">05 mars 2026</div></div><div class="ab a">Absent</div></div>
+</div>
+
+<!-- ═══════ SCHEDULE ═══════ -->
+<div class="screen" id="schedule">
+  <div class="bar"><h2>Emploi du temps</h2></div>
+  <div class="tabs"><div class="tab">Lundi</div><div class="tab">Mardi</div><div class="tab">Mercredi</div><div class="tab act">Jeudi<span class="dot"></span></div><div class="tab">Vendredi</div><div class="tab">Samedi</div></div>
+  <div class="slist">
+    <div class="ci now"><div class="ct nt"><div class="s">08:00</div><div class="sp"></div><div class="e">10:00</div></div><div class="cb"></div><div class="cinfo"><h4>Maths discrètes</h4><div class="m"><span class="material-icons-round">room</span>Amphi A · Prof. Houngbo</div></div><div class="bn">En cours</div></div>
+    <div class="ci"><div class="ct"><div class="s">10:00</div><div class="sp"></div><div class="e">12:00</div></div><div class="cb"></div><div class="cinfo"><h4>Algorithmique avancée</h4><div class="m"><span class="material-icons-round">room</span>Amphi B · Dr. Ahouannou</div></div></div>
+    <div class="ci"><div class="ct"><div class="s">14:00</div><div class="sp"></div><div class="e">16:00</div></div><div class="cb"></div><div class="cinfo"><h4>Base de données</h4><div class="m"><span class="material-icons-round">room</span>Salle 204 · Prof. Dossou</div></div></div>
+    <div class="ci"><div class="ct"><div class="s">16:30</div><div class="sp"></div><div class="e">18:00</div></div><div class="cb"></div><div class="cinfo"><h4>Réseaux informatiques</h4><div class="m"><span class="material-icons-round">room</span>Labo 3 · Dr. Agbangla</div></div></div>
+  </div>
+</div>
+
+<!-- ═══════ ATTENDANCE ═══════ -->
+<div class="screen" id="atten">
+  <div class="bar"><h2>Historique de présence</h2></div>
+  <div class="pcard">
+    <div class="ptop"><span class="pl">Taux de présence global</span><span class="pv">87.5%</span></div>
+    <div class="pbar"><div class="pf" style="width:87.5%"></div></div>
+    <div class="mstats"><div class="ms"><div class="mn g">21</div><div class="ml">Présent</div></div><div class="ms"><div class="mn y">3</div><div class="ml">Retard</div></div><div class="ms"><div class="mn r">2</div><div class="ml">Absent</div></div></div>
+  </div>
+  <div class="frow"><button class="fc act">Tous</button><button class="fc">Présent</button><button class="fc">Retard</button><button class="fc">Absent</button></div>
+  <div class="alist">
+    <div class="ai"><div class="aic p"><span class="material-icons-round">check_circle</span></div><div class="ainf"><h5>Algorithmique avancée</h5><div class="d">07 mars · 10:02</div></div><div class="ab p">Présent</div></div>
+    <div class="ai"><div class="aic l"><span class="material-icons-round">schedule</span></div><div class="ainf"><h5>Base de données</h5><div class="d">06 mars · 14:12</div></div><div class="ab l">Retard</div></div>
+    <div class="ai"><div class="aic p"><span class="material-icons-round">check_circle</span></div><div class="ainf"><h5>Réseaux informatiques</h5><div class="d">06 mars · 16:31</div></div><div class="ab p">Présent</div></div>
+    <div class="ai"><div class="aic a"><span class="material-icons-round">cancel</span></div><div class="ainf"><h5>Mathématiques</h5><div class="d">05 mars</div></div><div class="ab a">Absent</div></div>
+    <div class="ai"><div class="aic p"><span class="material-icons-round">check_circle</span></div><div class="ainf"><h5>Algorithmique avancée</h5><div class="d">04 mars · 10:01</div></div><div class="ab p">Présent</div></div>
+    <div class="ai"><div class="aic p"><span class="material-icons-round">check_circle</span></div><div class="ainf"><h5>Base de données</h5><div class="d">04 mars · 14:00</div></div><div class="ab p">Présent</div></div>
+    <div class="ai"><div class="aic l"><span class="material-icons-round">schedule</span></div><div class="ainf"><h5>Réseaux informatiques</h5><div class="d">03 mars · 16:42</div></div><div class="ab l">Retard</div></div>
+  </div>
+</div>
+
+<!-- ═══════ PROFILE ═══════ -->
+<div class="screen" id="profile">
+  <div class="bar"><h2>Mon profil</h2></div>
+  <div class="pav">K<div class="cam"><span class="material-icons-round">photo_camera</span></div></div>
+  <div class="pname">Kofi Mensah</div>
+  <div class="uchip">Université d'Abomey-Calavi</div>
+  <div class="isec">
+    <div class="ist">Informations personnelles</div>
+    <div class="icard">
+      <div class="ir"><span class="material-icons-round">email</span><span class="il">Email</span><span class="iv">kofi.mensah@uac.bj</span></div>
+      <div class="ir"><span class="material-icons-round">phone</span><span class="il">Téléphone</span><span class="iv">+229 97 12 34 56</span></div>
+      <div class="ir"><span class="material-icons-round">badge</span><span class="il">Matricule</span><span class="iv">UAC20231045</span></div>
+      <div class="ir"><span class="material-icons-round">school</span><span class="il">Filière</span><span class="iv">Informatique</span></div>
+      <div class="ir"><span class="material-icons-round">stairs</span><span class="il">Niveau</span><span class="iv">Licence 3</span></div>
+    </div>
+  </div>
+  <div class="isec">
+    <div class="ist">Carte RFID</div>
+    <div class="icard">
+      <div class="ir"><span class="material-icons-round">credit_card</span><span class="il">N° Carte</span><span class="iv">A3:F7:2B:9E</span></div>
+      <div class="ir"><span class="material-icons-round">circle</span><span class="il">Statut</span><span class="iv g">Active</span></div>
+      <div class="ir"><span class="material-icons-round">access_time</span><span class="il">Dernier scan</span><span class="iv">07/03 10:02</span></div>
+    </div>
+  </div>
+  <button class="blogout" onclick="go('login')"><span class="material-icons-round">logout</span> Se déconnecter</button>
+</div>
+
+<!-- ═══════ BOTTOM NAV ═══════ -->
+<div class="bottom-nav" id="bnav">
+  <div class="nav-item active" onclick="go('home')"><span class="material-icons-round">home</span><span>Accueil</span></div>
+  <div class="nav-item" onclick="go('schedule')"><span class="material-icons-round">calendar_today</span><span>EDT</span></div>
+  <div class="nav-item" onclick="go('atten')"><span class="material-icons-round">fact_check</span><span>Présences</span></div>
+  <div class="nav-item" onclick="go('profile')"><span class="material-icons-round">person</span><span>Profil</span></div>
+</div>
+
+<script>
+// ── Particles for splash ──
+(function(){
+  const c = document.getElementById('particles');
+  for(let i=0;i<20;i++){
+    const p = document.createElement('div');
+    p.className='particle';
+    p.style.left = Math.random()*100+'%';
+    p.style.animationDuration = (3+Math.random()*5)+'s';
+    p.style.animationDelay = Math.random()*4+'s';
+    p.style.width = p.style.height = (2+Math.random()*3)+'px';
+    c.appendChild(p);
+  }
+})();
+
+// ── Navigation ──
+let cur='splash';
+const mainScreens=['home','schedule','atten','profile'];
+const navMap={home:0,schedule:1,atten:2,profile:3};
+
+function go(id){
+  if(id===cur) return;
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById(id);
+  el.classList.add('active');
+  el.scrollTop=0;
+  cur=id;
+  const nav=document.getElementById('bnav');
+  if(mainScreens.includes(id)){
+    nav.style.display='flex';
+    document.querySelectorAll('.nav-item').forEach((n,i)=>n.classList.toggle('active',i===navMap[id]));
+  } else {
+    nav.style.display='none';
+  }
+}
+
+// Auto splash → login
+setTimeout(()=>go('login'),2800);
+
+// Tab clicks
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('act'));
+  t.classList.add('act');
+}));
+
+// Filter chips
+document.querySelectorAll('.fc').forEach(c=>c.addEventListener('click',()=>{
+  document.querySelectorAll('.fc').forEach(x=>x.classList.remove('act'));
+  c.classList.add('act');
+}));
+
+// ── University → Matricule adaptation ──
+function onUniChange(){
+  const sel = document.getElementById('uniSelect');
+  const opt = sel.options[sel.selectedIndex];
+  const prefix = opt.dataset.prefix;
+  const digits = parseInt(opt.dataset.digits);
+  const input = document.getElementById('matriculeInput');
+  const hint = document.getElementById('matriculeHint');
+  // Generate sample number
+  const year = '2023';
+  const rest = '1045'.padStart(digits - 4, '0');
+  input.value = prefix + year + rest;
+  input.placeholder = prefix + '20XX' + '0'.repeat(Math.max(0, digits - 4));
+  input.maxLength = prefix.length + digits;
+  hint.innerHTML = '<span class="material-icons-round">info</span> Format : ' + prefix + ' + ' + digits + ' chiffres';
+}
+</script>
+</body>
+</html>
