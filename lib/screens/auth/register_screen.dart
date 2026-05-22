@@ -72,10 +72,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   String? _generatedMatricule; // reçu du backend après inscription
   int _step = 0;
 
-  // LCS est la seule université — ID fixe
-  static const _lcsUniversityId = 4;
-
-  // Filières chargées depuis l'API
+  // Université & filières chargées dynamiquement depuis l'API
+  int?    _universityId;
+  String  _universityName = '';
   List<Map<String, dynamic>> _filieresFromApi = [];
   bool _loadingFilieres = false;
 
@@ -98,18 +97,36 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     _filiereFocus  .addListener(() => setState(() => _filiereFocused   = _filiereFocus.hasFocus));
     _passCtl   .addListener(() => setState(() {}));
     _confirmCtl.addListener(() => setState(() {}));
-    // Charger les filières LCS dès le démarrage
-    _loadFilieres(_lcsUniversityId);
+    // Charger l'université puis les filières depuis l'API
+    _loadUniversityAndFilieres();
   }
 
-  Future<void> _loadFilieres(int universityId) async {
+  /// Récupère la première université disponible puis charge ses filières
+  Future<void> _loadUniversityAndFilieres() async {
     setState(() { _loadingFilieres = true; _filieresFromApi = []; });
     try {
-      final resp = await _api.dio.get(ApiEndpoints.filieresPublic(universityId));
-      final list = (resp.data['data'] as List?) ?? [];
+      // 1. Récupérer la liste des universités
+      final uResp = await _api.dio.get(ApiEndpoints.universities);
+      final uList = (uResp.data['data'] as List?) ?? [];
+      if (uList.isEmpty) {
+        if (mounted) setState(() => _loadingFilieres = false);
+        return;
+      }
+      // Chercher LCS (code "LCS"), sinon prendre la première
+      final uData = uList.firstWhere(
+        (u) => (u['code'] as String? ?? '').toUpperCase() == 'LCS',
+        orElse: () => uList.first,
+      ) as Map<String, dynamic>;
+      final uId   = uData['id'] as int;
+      final uName = uData['name'] as String? ?? '';
+      if (mounted) setState(() { _universityId = uId; _universityName = uName; });
+
+      // 2. Charger les filières pour cette université
+      final fResp = await _api.dio.get(ApiEndpoints.filieresPublic(uId));
+      final fList = (fResp.data['data'] as List?) ?? [];
       if (mounted) {
         setState(() {
-          _filieresFromApi = list
+          _filieresFromApi = fList
               .map((f) => {'id': f['id'], 'name': f['name'], 'code': f['code']})
               .toList();
         });
@@ -207,6 +224,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         '${_birthDate!.day.toString().padLeft(2,'0')}',
         'filiere'               : _selectedFiliereName ?? _filiereCtl.text.trim(),
         if (_selectedFiliereId != null) 'filiere_id': _selectedFiliereId.toString(),
+        if (_universityId != null) 'university_id': _universityId.toString(),
         'level'                 : niveauBackend,
       });
       final response = await _api.dio.post(ApiEndpoints.registerStudent, data: fd);
@@ -745,9 +763,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             Expanded(child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Les Cours SONOU (LCS)', style: GoogleFonts.inter(
-                  fontSize: 14, fontWeight: FontWeight.w700, color: const Color(0xFF1D4ED8),
-                )),
+                Text(
+                  _universityName.isNotEmpty ? _universityName : 'Chargement…',
+                  style: GoogleFonts.inter(
+                    fontSize: 14, fontWeight: FontWeight.w700, color: const Color(0xFF1D4ED8),
+                  ),
+                ),
                 Text('Votre matricule sera généré automatiquement', style: GoogleFonts.inter(
                   fontSize: 11, color: const Color(0xFF3B82F6),
                 )),
