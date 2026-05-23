@@ -375,9 +375,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                             const SizedBox(width: 12),
                             Expanded(
                               child: _ActionCard(
-                                icon: Iconsax.medal_star,
-                                label: 'Mes Notes',
-                                sub: 'Hub & résultats',
+                                icon: Iconsax.clock,
+                                label: 'Présences',
+                                sub: 'Historique & stats',
                                 gradient: const LinearGradient(
                                   colors: [_kViolet, _kCoral],
                                   begin: Alignment.topLeft,
@@ -385,7 +385,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                 ),
                                 onTap: () {
                                   HapticFeedback.mediumImpact();
-                                  context.push('/grades');
+                                  context.push('/attendance');
                                 },
                               ),
                             ),

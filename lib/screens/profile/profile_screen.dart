@@ -231,10 +231,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                         child: _QuickAction(
-                            icon: Iconsax.document_text,
-                            label: 'MES NOTES',
+                            icon: Iconsax.clock,
+                            label: 'PRÉSENCES',
                             color: AppTheme.violet,
-                            onTap: () => context.push('/grades'))),
+                            onTap: () => context.push('/attendance'))),
                     const SizedBox(width: 10),
                     Expanded(
                         child: _QuickAction(

@@ -12,7 +12,6 @@ import 'screens/attendance/attendance_screen.dart';
 import 'screens/profile/profile_screen.dart';
 import 'screens/shell/app_shell.dart';
 import 'screens/scanner/scanner_screen.dart';
-import 'screens/grades/grades_screen.dart';
 import 'screens/notifications/notifications_screen.dart';
 import 'screens/justification/justification_screen.dart';
 import 'screens/settings/settings_screen.dart';
@@ -62,11 +61,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/attendance',
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) => const AttendanceScreen(),
-      ),
-      GoRoute(
-        path: '/grades',
-        parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) => const GradesScreen(),
       ),
       GoRoute(
         path: '/notifications',
