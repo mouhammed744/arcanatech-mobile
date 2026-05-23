@@ -9,6 +9,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../core/theme/app_theme.dart';
 import '../../models/grade.dart';
 import '../../providers/grades_provider.dart';
+import '../../providers/attendance_provider.dart';
 import '../../widgets/loading_indicator.dart';
 
 // ─── Hub Gamifié des Notes ────────────────────────────────────────────────────
@@ -44,7 +45,11 @@ class _GradesScreenState extends ConsumerState<GradesScreen>
         vsync: this, duration: const Duration(milliseconds: 1600));
 
     Future.microtask(() async {
-      await ref.read(gradesProvider.notifier).loadGrades();
+      // Charger notes et présences en parallèle
+      await Future.wait([
+        ref.read(gradesProvider.notifier).loadGrades(),
+        ref.read(attendanceProvider.notifier).loadAttendances(),
+      ]);
       // Lancer les animations après chargement
       if (mounted) {
         _xpCtl.forward();
@@ -89,7 +94,8 @@ class _GradesScreenState extends ConsumerState<GradesScreen>
 
   @override
   Widget build(BuildContext context) {
-    final gradesState = ref.watch(gradesProvider);
+    final gradesState     = ref.watch(gradesProvider);
+    final attendanceState = ref.watch(attendanceProvider);
 
     return Scaffold(
       backgroundColor: AppTheme.bg,
@@ -321,14 +327,14 @@ class _GradesScreenState extends ConsumerState<GradesScreen>
                                   title: 'Régulier',
                                   sub: '15 présences',
                                   color: AppTheme.success,
-                                  unlocked: true),
+                                  unlocked: attendanceState.totalPresent >= 15),
                               const SizedBox(width: 10),
                               _TrophyCard(
                                   icon: '🔥',
-                                  title: 'En feu',
-                                  sub: '5 cours d\'affilée',
+                                  title: 'Assidu',
+                                  sub: '5 présences',
                                   color: AppTheme.coral,
-                                  unlocked: true),
+                                  unlocked: attendanceState.totalPresent >= 5),
                               const SizedBox(width: 10),
                               _TrophyCard(
                                   icon: '⚡',
@@ -342,7 +348,8 @@ class _GradesScreenState extends ConsumerState<GradesScreen>
                                   title: 'Maître',
                                   sub: 'Tous ECTS validés',
                                   color: AppTheme.violet,
-                                  unlocked: gradesState.validatedECTS ==
+                                  unlocked: gradesState.totalECTS > 0 &&
+                                      gradesState.validatedECTS ==
                                       gradesState.totalECTS),
                             ],
                           ),

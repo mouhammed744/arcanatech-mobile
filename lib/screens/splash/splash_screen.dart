@@ -10,12 +10,11 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../providers/auth_provider.dart';
 
 // ─── Palette dark splash (indépendant du thème clair de l'app) ─────────────
-const _kBg       = Color(0xFF04040F);
-const _kBlue     = Color(0xFF2563EB);
-const _kCyan     = Color(0xFF06B6D4);
-const _kViolet   = Color(0xFF7C3AED);
-const _kOrange   = Color(0xFFF97316);
-const _kWhite    = Colors.white;
+const _kBg     = Color(0xFF04040F);
+const _kBlue   = Color(0xFF2563EB);
+const _kCyan   = Color(0xFF06B6D4);
+const _kViolet = Color(0xFF7C3AED);
+const _kWhite  = Colors.white;
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -45,7 +44,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     _pulse  = AnimationController(vsync: this, duration: const Duration(milliseconds: 2200))..repeat(reverse: true);
     _orbit  = AnimationController(vsync: this, duration: const Duration(seconds: 7))..repeat();
     _float  = AnimationController(vsync: this, duration: const Duration(milliseconds: 3600))..repeat(reverse: true);
-    _bar    = AnimationController(vsync: this, duration: const Duration(milliseconds: 2800));
+    _bar    = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000));
     _bar.forward();
     _playStartupSound();
     _navigate();
@@ -74,7 +73,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   }
 
   Future<void> _navigate() async {
-    await Future.delayed(const Duration(milliseconds: 3000));
+    // Attendre 1s (durée du son + animation barre)
+    await Future.delayed(const Duration(milliseconds: 1000));
     if (!mounted) return;
     final ok = await ref.read(authProvider.notifier).checkAuth();
     if (!mounted) return;
